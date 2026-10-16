@@ -1,0 +1,52 @@
+*whatchanged.txt*  See what changed on disk since your last edit
+
+==============================================================================
+INTRODUCTION                                            *whatchanged*
+
+When another program edits a file you have open (an AI coding agent, a
+formatter, a git checkout), whatchanged.vim:
+
+  - reloads it within a second, even while Vim isn't focused, unless you have
+    unsaved changes, in which case Vim asks first;
+  - remembers how the file looked before the first outside edit since your own
+    last change, so |:WhatChanged| can show every outside edit as one diff.
+
+Reloads are ordinary undo steps: |u| reverts them.
+
+Note: the plugin sets 'noautoread'.  'autoread' reloads files without firing
+|FileChangedShell|, which this plugin needs to take its snapshot.  The plugin
+does the reloading itself, so nothing is lost.
+
+==============================================================================
+COMMANDS                                                *whatchanged-commands*
+
+:WhatChanged                                            *:WhatChanged*
+        Open a vertical split with the file as it was before the outside
+        edits, diffed against the current buffer.  Press q in the split to
+        close it.
+
+:WhatChangedReset                                       *:WhatChangedReset*
+        Forget the snapshot (mark the changes as reviewed).  Editing the
+        buffer yourself does this too.
+
+==============================================================================
+MAPPINGS                                                *whatchanged-mappings*
+
+No keys are mapped by default.  For example: >
+        nmap <leader>D <Plug>(WhatChanged)
+<
+==============================================================================
+OPTIONS                                                 *whatchanged-options*
+
+g:whatchanged_poll_ms                                   *g:whatchanged_poll_ms*
+        How often to check open files, in milliseconds.  0 turns polling
+        off (files are still checked on focus and buffer switches).
+        Default: 1000
+
+g:whatchanged_notify                                    *g:whatchanged_notify*
+        Show "↻ file changed on disk" after a reload.  Default: 1
+
+g:whatchanged_hl                                        *g:whatchanged_hl*
+        Highlight group for that message.  Default: "Comment"
+
+ vim:tw=78:ts=8:ft=help:norl:
